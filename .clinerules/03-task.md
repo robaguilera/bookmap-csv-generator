@@ -4,6 +4,7 @@
 - [x] 2025-05-01: Implement API integration.
 - [x] 2025-05-01: Test API endpoints.
 - [x] 2025-05-01: Implement data storage
+- [ ] 2025-05-01: Implement CSV file generation for previous day OHLC
 - [ ] 2025-05-01: Implement Camarilla pivot point calculations
 - [ ] 2025-05-01: Implement CSV file generation
 - [ ] 2025-05-01: Implement archiving
