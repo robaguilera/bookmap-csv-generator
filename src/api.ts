@@ -90,8 +90,8 @@ async function fetchHistoricalData(
   return data;
 }
 
-async function storeHistoricalData(symbol: string, data: HistoricalResponse) {
-  const filePath = join(historicalDataDir, `${symbol}.json`);
+async function storeHistoricalData(symbol: string, data: HistoricalResponse, destinationDir: string = historicalDataDir) {
+  const filePath = join(destinationDir, `${symbol}.json`);
 
   try {
     // Read existing data from file
