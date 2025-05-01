@@ -99,12 +99,12 @@ async function storeHistoricalData(
 
 	try {
 		// Read existing data from file
-		let existingData: any = {};
+		let existingData: { series?: HistoricalData[] } = {};
 		try {
 			const fileContent = await fs.promises.readFile(filePath, "utf-8");
 			existingData = JSON.parse(fileContent);
-		} catch (readError: any) {
-			if (readError.code !== "ENOENT") {
+		} catch (readError: unknown) {
+			if ((readError as { code: string }).code !== "ENOENT") {
 				console.error(`Error reading existing data for ${symbol}:`, readError);
 				throw readError;
 			}
@@ -120,7 +120,7 @@ async function storeHistoricalData(
 		await fs.promises.writeFile(filePath, JSON.stringify(updatedData, null, 2));
 
 		console.log(`Historical data stored for ${symbol} in ${filePath}`);
-	} catch (error: any) {
+	} catch (error: unknown) {
 		console.error(`Error storing historical data for ${symbol}:`, error);
 		throw error;
 	}
