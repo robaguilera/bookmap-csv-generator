@@ -1,5 +1,12 @@
-function welcomeUser(user) {
-	return `Hello, ${user.name}!`;
+import { generateOhlcCSV } from "./src/csv";
+
+async function main() {
+	const symbols = ["CME_MINI:ES1!", "CME_MINI:NQ1!"];
+
+	for (const symbol of symbols) {
+		// Generate OHLC CSV
+		await generateOhlcCSV(symbol);
+	}
 }
 
-console.log(welcomeUser({ name: "Alice" }));
+main().catch(console.error);
