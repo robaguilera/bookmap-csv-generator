@@ -86,19 +86,30 @@ Please see `04-api-specs.md` for more details.
 ## Testing
 We will need tests to ensure that we're calculating not only the correct formulas but the test utilities that will modify data and files.
 
-
 ## Project Structure
+
+| File/Directory                       | Description                                                       |
+|--------------------------------------|-------------------------------------------------------------------|
+| `csv/`                               | Directory containing the generated CSV files.                     |
+| `data/historical/CME_MINI:ES1!.json` | Historical data for ES future.                                    |
+| `src/api.ts`                         | Contains functions for fetching OHLCV and historical data         |
+| `src/csv.ts`                         | Contains functions for generating CSV files from historical data. |
+| `src/test.ts`                        | Script for testing API endpoints.                                 |
+| `tests/index_test.ts`                | Tests for API and CSV generation functions.                       |
+| `tests/sample_ohlcv.csv`             | Sample OHLCV CSV file for testing.                                |
+| `tests/sample_pivots.csv`            | Sample pivots CSV file for testing.                               |
+| `tests/test.json`                    | Test data.                                                        |
 
 ## Architectual Patterns
 Please see the following for directions on conventions I prefer.
 
-### 📤 File Conventions
+### � File Conventions
 - **Use named exports over default exports**
 - **Exports go at the bottom of the file**
 - **Properly add types** whenever it makes sense
 - **Prefer absolute imports** over relative imports
 
-### 📎 Style & Conventions
+### �📎 Style & Conventions
 - **Follow the Airbnb style guide**
 - **Use Typescript** as the primary language.
 - **Document functions using JSDoc** when appropriate

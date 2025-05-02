@@ -1,6 +1,5 @@
 import { promises as fs } from "node:fs";
 import { join } from "node:path";
-import { fetchHistoricalData } from "./api";
 
 const csvDir = "csv";
 const historicalDataDir = "data/historical";
