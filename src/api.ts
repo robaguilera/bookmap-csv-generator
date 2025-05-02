@@ -127,3 +127,5 @@ async function storeHistoricalData(
 }
 
 export { fetchOhlcv, fetchHistoricalData, storeHistoricalData };
+
+export type { HistoricalResponse };
