@@ -91,7 +91,7 @@ test("storeHistoricalData stores data to file", async () => {
 		expect(error).toBeNull();
 	}
 
-	// Optionally, clean up the file after the test
+	// Clean up the file after the test
 	await fs.unlink(filePath);
 });
 
@@ -153,17 +153,16 @@ test("generateOhlcCSV generates CSV file", async () => {
 				],
 			};
 		},
-		fetchHistoricalData: async (symbol: string) => {
+		fetchHistoricalData: async (_symbol: string) => {
 			return historicalData;
 		},
 	}));
 
-	// Optionally, clean up the file after the test
-	const expectedCsvContent = `Symbol,Price Level,Note,Foreground Color,Background Color,Text Alignment,Draw Note Price Horizontal Line,time,open,high,low,close,volume
-	CME_MINI:ES1!,${lastDay.high},PDH,#ffffff,#FF00FF,right,TRUE,${lastDay.time},${lastDay.open},${lastDay.high},${lastDay.low},${lastDay.close},${lastDay.volume}
-	CME_MINI:ES1!,${lastDay.close},PDC,#ffffff,#FF00FF,right,TRUE,${lastDay.time},${lastDay.open},${lastDay.high},${lastDay.low},${lastDay.close},${lastDay.volume}
-	CME_MINI:ES1!,${lastDay.low},PDL,#ffffff,#FF00FF,right,TRUE,${lastDay.time},${lastDay.open},${lastDay.high},${lastDay.low},${lastDay.close},${lastDay.volume}
-	CME_MINI:ES1!,${lastDay.open},PDO,#ffffff,#FF00FF,right,TRUE,${lastDay.time},${lastDay.open},${lastDay.high},${lastDay.low},${lastDay.close},${lastDay.volume}`;
+	const expectedCsvContent = `Symbol,Price Level,Note,Foreground Color,Background Color,Text Alignment,Draw Note Price Horizontal Line
+	CME_MINI:ES1!,${lastDay.high},PDH,#ffffff,#FF00FF,right,TRUE
+	CME_MINI:ES1!,${lastDay.close},PDC,#ffffff,#FF00FF,right,TRUE
+	CME_MINI:ES1!,${lastDay.low},PDL,#ffffff,#FF00FF,right,TRUE
+	CME_MINI:ES1!,${lastDay.open},PDO,#ffffff,#FF00FF,right,TRUE`;
 
 	const fileContent = await fs.readFile(filePath, "utf-8");
 
@@ -172,5 +171,7 @@ test("generateOhlcCSV generates CSV file", async () => {
 	const normalizedReceived = fileContent.replace(/\s/g, "");
 
 	expect(normalizedReceived).toBe(normalizedExpected);
+
+	// Clean up the file after the test
 	await fs.unlink(filePath);
 });

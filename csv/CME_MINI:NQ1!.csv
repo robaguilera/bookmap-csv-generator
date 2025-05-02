@@ -1,5 +1,5 @@
-Symbol,Price Level,Note,Foreground Color,Background Color,Text Alignment,Draw Note Price Horizontal Line,time,open,high,low,close,volume
-CME_MINI:NQ1!,20125.75,PDH,#ffffff,#FF00FF,right,TRUE,1746050400,19834,20125.75,19757.25,19870.75,581848
-CME_MINI:NQ1!,19870.75,PDC,#ffffff,#FF00FF,right,TRUE,1746050400,19834,20125.75,19757.25,19870.75,581848
-CME_MINI:NQ1!,19757.25,PDL,#ffffff,#FF00FF,right,TRUE,1746050400,19834,20125.75,19757.25,19870.75,581848
-CME_MINI:NQ1!,19834,PDO,#ffffff,#FF00FF,right,TRUE,1746050400,19834,20125.75,19757.25,19870.75,581848
+Symbol,Price Level,Note,Foreground Color,Background Color,Text Alignment,Draw Note Price Horizontal Line
+CME_MINI:NQ1!,20125.75,PDH,#ffffff,#FF00FF,right,TRUE
+CME_MINI:NQ1!,19870.75,PDC,#ffffff,#FF00FF,right,TRUE
+CME_MINI:NQ1!,19757.25,PDL,#ffffff,#FF00FF,right,TRUE
+CME_MINI:NQ1!,19834,PDO,#ffffff,#FF00FF,right,TRUE

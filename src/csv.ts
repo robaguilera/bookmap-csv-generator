@@ -13,7 +13,7 @@ interface HistoricalData {
 	volume: number;
 }
 
-interface CombinedData extends HistoricalData {
+interface CombinedData {
 	Symbol: string;
 	"Price Level": number;
 	Note: string;
@@ -26,7 +26,7 @@ interface CombinedData extends HistoricalData {
 async function generateOhlcCSV(symbol: string) {
 	const filePath = join(historicalDataDir, `${symbol}.json`);
 
-	let data: { series: CombinedData[] } | undefined;
+	let data: { series: HistoricalData[] } | undefined;
 	try {
 		const fileContent = await fs.readFile(filePath, "utf-8");
 		data = JSON.parse(fileContent);
@@ -57,12 +57,6 @@ async function generateOhlcCSV(symbol: string) {
 			"Background Color": "#FF00FF",
 			"Text Alignment": "right",
 			"Draw Note Price Horizontal Line": "TRUE",
-			time: lastDay.time,
-			open: lastDay.open,
-			high: lastDay.high,
-			low: lastDay.low,
-			close: lastDay.close,
-			volume: lastDay.volume,
 		},
 		{
 			Symbol: symbol,
@@ -72,12 +66,6 @@ async function generateOhlcCSV(symbol: string) {
 			"Background Color": "#FF00FF",
 			"Text Alignment": "right",
 			"Draw Note Price Horizontal Line": "TRUE",
-			time: lastDay.time,
-			open: lastDay.open,
-			high: lastDay.high,
-			low: lastDay.low,
-			close: lastDay.close,
-			volume: lastDay.volume,
 		},
 		{
 			Symbol: symbol,
@@ -87,12 +75,6 @@ async function generateOhlcCSV(symbol: string) {
 			"Background Color": "#FF00FF",
 			"Text Alignment": "right",
 			"Draw Note Price Horizontal Line": "TRUE",
-			time: lastDay.time,
-			open: lastDay.open,
-			high: lastDay.high,
-			low: lastDay.low,
-			close: lastDay.close,
-			volume: lastDay.volume,
 		},
 		{
 			Symbol: symbol,
@@ -102,12 +84,6 @@ async function generateOhlcCSV(symbol: string) {
 			"Background Color": "#FF00FF",
 			"Text Alignment": "right",
 			"Draw Note Price Horizontal Line": "TRUE",
-			time: lastDay.time,
-			open: lastDay.open,
-			high: lastDay.high,
-			low: lastDay.low,
-			close: lastDay.close,
-			volume: lastDay.volume,
 		},
 	];
 
