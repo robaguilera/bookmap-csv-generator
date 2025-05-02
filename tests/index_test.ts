@@ -133,31 +133,6 @@ test("generateOhlcCSV generates CSV file", async () => {
 	const historicalData = JSON.parse(historicalDataFile);
 	const lastDay = historicalData.series[historicalData.series.length - 1];
 
-	// Mock API calls
-	mock(() => ({
-		fetchOhlcv: async (symbol: string) => {
-			return {
-				code: symbol,
-				bar_end: 1672531200,
-				last_update: 1672531200000,
-				bar_type: "1D",
-				series: [
-					{
-						time: 1672531200,
-						open: 100,
-						high: 120,
-						low: 90,
-						close: 110,
-						volume: 1000,
-					},
-				],
-			};
-		},
-		fetchHistoricalData: async (_symbol: string) => {
-			return historicalData;
-		},
-	}));
-
 	const expectedCsvContent = `Symbol,Price Level,Note,Foreground Color,Background Color,Text Alignment,Draw Note Price Horizontal Line
 	CME_MINI:ES1!,${lastDay.high},PDH,#ffffff,#FF00FF,right,TRUE
 	CME_MINI:ES1!,${lastDay.close},PDC,#ffffff,#FF00FF,right,TRUE
