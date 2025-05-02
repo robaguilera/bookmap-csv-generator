@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import { join } from "node:path";
 import fetch from "node-fetch";
+import type { HistoricalResponse, OhlcvResponse } from "./api/apiAdapter";
 
 const apiKey = process.env.RAPIDAPI_KEY;
 
@@ -10,23 +11,6 @@ if (!apiKey) {
 
 const baseUrl = "https://insightsentry.p.rapidapi.com/v2/symbols";
 const historicalDataDir = "data/historical";
-
-interface OhlcvData {
-	time: number;
-	open: number;
-	high: number;
-	low: number;
-	close: number;
-	volume: number;
-}
-
-interface OhlcvResponse {
-	code: string;
-	bar_end: number;
-	last_update: number;
-	bar_type: string;
-	series: OhlcvData[];
-}
 
 async function fetchOhlcv(symbol: string): Promise<OhlcvResponse> {
 	const url = `${baseUrl}/${symbol}/series?bar_type=day&bar_interval=1&extended=true&badj=true&dadj=false`;
@@ -48,23 +32,6 @@ async function fetchOhlcv(symbol: string): Promise<OhlcvResponse> {
 	const data = (await response.json()) as OhlcvResponse;
 
 	return data;
-}
-
-interface HistoricalData {
-	time: number;
-	open: number;
-	high: number;
-	low: number;
-	close: number;
-	volume: number;
-}
-
-interface HistoricalResponse {
-	code: string;
-	bar_end: number;
-	last_update: number;
-	bar_type: string;
-	series: HistoricalData[];
 }
 
 async function fetchHistoricalData(
@@ -99,7 +66,7 @@ async function storeHistoricalData(
 
 	try {
 		// Read existing data from file
-		let existingData: { series?: HistoricalData[] } = {};
+		let existingData: { series?: any[] } = {};
 		try {
 			const fileContent = await fs.promises.readFile(filePath, "utf-8");
 			existingData = JSON.parse(fileContent);
@@ -127,5 +94,3 @@ async function storeHistoricalData(
 }
 
 export { fetchOhlcv, fetchHistoricalData, storeHistoricalData };
-
-export type { HistoricalResponse };
