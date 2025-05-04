@@ -2,10 +2,10 @@ import { beforeAll, expect, mock, test } from "bun:test";
 import fs from "node:fs/promises";
 import { join } from "node:path";
 import {
-	fetchHistoricalData,
-	fetchOhlcv,
-	storeHistoricalData,
-} from "../src/api";
+	getHistoricalData,
+	getOhlcvData,
+	saveHistoricalData,
+} from "../src/dataService";
 
 beforeAll(async () => {
 	try {
@@ -17,7 +17,7 @@ beforeAll(async () => {
 
 // Mock API calls
 mock(() => ({
-	fetchOhlcv: async (symbol: string) => {
+	getOhlcvData: async (symbol: string) => {
 		return {
 			code: symbol,
 			bar_end: 1672531200,
@@ -35,7 +35,7 @@ mock(() => ({
 			],
 		};
 	},
-	fetchHistoricalData: async (symbol: string) => {
+	getHistoricalData: async (symbol: string) => {
 		return {
 			code: symbol,
 			bar_end: 1672531200,
@@ -56,20 +56,20 @@ mock(() => ({
 }));
 
 test("fetchOhlcv returns data", async () => {
-	const data = await fetchOhlcv("CME_MINI:ES1!");
+	const data = await getOhlcvData("CME_MINI:ES1!");
 	expect(data).toBeDefined();
 	expect(data.series.length).toBeGreaterThan(0);
 });
 
 test("fetchHistoricalData returns data", async () => {
-	const data = await fetchHistoricalData("CME_MINI:ES1!");
+	const data = await getHistoricalData("CME_MINI:ES1!");
 	expect(data).toBeDefined();
 	expect(data.series.length).toBeGreaterThan(0);
 });
 
 test("storeHistoricalData stores data to file", async () => {
 	const symbol = "CME_MINI:ES1!";
-	const data = await fetchHistoricalData(symbol);
+	const data = await getHistoricalData(symbol);
 	const filePath = join("./test_data/historical", `${symbol}.json`);
 
 	// Ensure the file doesn't exist before the test
@@ -82,7 +82,7 @@ test("storeHistoricalData stores data to file", async () => {
 	}
 
 	// Call storeHistoricalData
-	await storeHistoricalData(symbol, data, "./test_data/historical");
+	await saveHistoricalData(symbol, data, "./test_data/historical");
 
 	// Check if the file exists after the function call
 	try {

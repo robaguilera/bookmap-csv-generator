@@ -1,5 +1,6 @@
-import type { HistoricalResponse, OhlcvResponse } from "./api/apiAdapter";
 import { insightsSentryApi } from "./api/insightsSentry";
+
+import type { HistoricalResponse, OhlcvResponse } from "./api/apiAdapter";
 
 const apiService = insightsSentryApi;
 
@@ -16,7 +17,6 @@ async function saveHistoricalData(
 	data: HistoricalResponse,
 	destinationDir: string,
 ) {
-	console.log("storing historical data", data);
 	await apiService.storeHistoricalData(symbol, data, destinationDir);
 }
 
