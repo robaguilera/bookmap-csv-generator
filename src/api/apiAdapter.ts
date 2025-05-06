@@ -33,7 +33,11 @@ interface HistoricalResponse {
 }
 
 interface ApiAdapter {
-	fetchOhlcv(symbol: string): Promise<OhlcvResponse>;
+	fetchOhlcv(
+		symbol: string,
+		bar_type?: string,
+		bar_interval?: number,
+	): Promise<OhlcvResponse>;
 	fetchHistoricalData(symbol: string): Promise<HistoricalResponse>;
 	storeHistoricalData(
 		symbol: string,
@@ -42,4 +46,10 @@ interface ApiAdapter {
 	): Promise<void>;
 }
 
-export type { ApiAdapter, OhlcvResponse, HistoricalResponse, HistoricalData };
+export type {
+	ApiAdapter,
+	OhlcvResponse,
+	HistoricalResponse,
+	HistoricalData,
+	OhlcvData,
+};

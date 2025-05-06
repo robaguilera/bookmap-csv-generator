@@ -111,6 +111,145 @@ test("getPreviousDayOHLC returns the previous day's OHLC data", async () => {
 	insightsSentryApi.fetchHistoricalData = originalFetchHistoricalData;
 });
 
+test("getCurrentDayPremarketHighLow returns correct high/low from premarket data", async () => {
+	const symbol = "CME_MINI:ES1!";
+	// Mock data with timestamps before and after 14:30 UTC
+	const now = new Date();
+	const cutoffTime = Date.UTC(
+		now.getUTCFullYear(),
+		now.getUTCMonth(),
+		now.getUTCDate(),
+		14,
+		30,
+		0,
+		0,
+	);
+	const premarketTime1 = Math.floor((cutoffTime - 120 * 60 * 1000) / 1000); // 2 hours before cutoff
+	const premarketTime2 = Math.floor((cutoffTime - 60 * 60 * 1000) / 1000); // 1 hour before cutoff
+	const postmarketTime = Math.floor((cutoffTime + 60 * 60 * 1000) / 1000); // 1 hour after cutoff
+
+	const mockOhlcvData = {
+		code: symbol,
+		bar_end: postmarketTime,
+		last_update: Date.now(),
+		bar_type: "minute",
+		series: [
+			{
+				time: premarketTime1,
+				open: 100,
+				high: 105,
+				low: 95,
+				close: 102,
+				volume: 10,
+			}, // Premarket
+			{
+				time: premarketTime2,
+				open: 102,
+				high: 110,
+				low: 101,
+				close: 108,
+				volume: 15,
+			}, // Premarket - Highest high
+			{
+				time: cutoffTime,
+				open: 108,
+				high: 109,
+				low: 90,
+				close: 92,
+				volume: 20,
+			}, // At cutoff - Lowest low (should be included if logic changes)
+			{
+				time: postmarketTime,
+				open: 92,
+				high: 115,
+				low: 91,
+				close: 112,
+				volume: 25,
+			}, // Postmarket (should be ignored)
+		],
+	};
+
+	const originalFetchOhlcv = insightsSentryApi.fetchOhlcv;
+	// Mock fetchOhlcv to return the specific minute data
+	insightsSentryApi.fetchOhlcv = (sym, type, interval) => {
+		expect(sym).toBe(symbol);
+		expect(type).toBe("minute");
+		expect(interval).toBe(1);
+		return Promise.resolve(mockOhlcvData);
+	};
+
+	const { getCurrentDayPremarketHighLow } = await import("../src/dataService");
+	const highLow = await getCurrentDayPremarketHighLow(symbol);
+
+	// Should only consider premarketTime1 and premarketTime2
+	expect(highLow).toEqual({ high: 110, low: 95 });
+
+	insightsSentryApi.fetchOhlcv = originalFetchOhlcv; // Restore original function
+});
+
+test("getCurrentDayPremarketHighLow returns undefined if only postmarket data exists", async () => {
+	const symbol = "CME_MINI:ES1!";
+	const now = new Date();
+	const cutoffTime = Date.UTC(
+		now.getUTCFullYear(),
+		now.getUTCMonth(),
+		now.getUTCDate(),
+		14,
+		30,
+		0,
+		0,
+	);
+	const postmarketTime = Math.floor((cutoffTime + 60 * 60 * 1000) / 1000);
+
+	const mockOhlcvData = {
+		code: symbol,
+		bar_end: postmarketTime,
+		last_update: Date.now(),
+		bar_type: "minute",
+		series: [
+			{
+				time: postmarketTime,
+				open: 92,
+				high: 115,
+				low: 91,
+				close: 112,
+				volume: 25,
+			},
+		],
+	};
+
+	const originalFetchOhlcv = insightsSentryApi.fetchOhlcv;
+	insightsSentryApi.fetchOhlcv = () => Promise.resolve(mockOhlcvData);
+
+	const { getCurrentDayPremarketHighLow } = await import("../src/dataService");
+	const highLow = await getCurrentDayPremarketHighLow(symbol);
+
+	expect(highLow).toBeUndefined();
+
+	insightsSentryApi.fetchOhlcv = originalFetchOhlcv;
+});
+
+test("getCurrentDayPremarketHighLow returns undefined for empty series", async () => {
+	const symbol = "CME_MINI:ES1!";
+	const mockOhlcvData = {
+		code: symbol,
+		bar_end: 1672531200, // Example timestamp
+		last_update: Date.now(),
+		bar_type: "minute",
+		series: [],
+	};
+
+	const originalFetchOhlcv = insightsSentryApi.fetchOhlcv;
+	insightsSentryApi.fetchOhlcv = () => Promise.resolve(mockOhlcvData);
+
+	const { getCurrentDayPremarketHighLow } = await import("../src/dataService");
+	const highLow = await getCurrentDayPremarketHighLow(symbol);
+
+	expect(highLow).toBeUndefined();
+
+	insightsSentryApi.fetchOhlcv = originalFetchOhlcv;
+});
+
 test("generateOhlcCSV generates CSV file", async () => {
 	const symbol = "CME_MINI:ES1!";
 	const filePath = join("csv", `${symbol}.csv`);

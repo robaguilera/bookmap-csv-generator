@@ -1,7 +1,11 @@
 import fs from "node:fs";
 import { join } from "node:path";
 import fetch from "node-fetch";
-import type { HistoricalResponse, OhlcvResponse } from "./apiAdapter";
+import type {
+	HistoricalData,
+	HistoricalResponse,
+	OhlcvResponse,
+} from "./apiAdapter";
 import type { ApiAdapter } from "./apiAdapter";
 
 const apiKey = process.env.RAPIDAPI_KEY;
@@ -14,8 +18,8 @@ const baseUrl = "https://insightsentry.p.rapidapi.com/v2/symbols";
 const historicalDataDir = "data/historical";
 
 const insightsSentryApi: ApiAdapter = {
-	fetchOhlcv: async (symbol: string) => {
-		const url = `${baseUrl}/${symbol}/series?bar_type=day&bar_interval=1&extended=true&badj=true&dadj=false`;
+	fetchOhlcv: async (symbol: string, bar_type = "day", bar_interval = 1) => {
+		const url = `${baseUrl}/${symbol}/series?bar_type=${bar_type}&bar_interval=${bar_interval}&extended=true&badj=true&dadj=false`;
 
 		const options = {
 			method: "GET",
@@ -64,7 +68,7 @@ const insightsSentryApi: ApiAdapter = {
 
 		try {
 			// Read existing data from file
-			let existingData: { series?: any[] } = {};
+			let existingData: { series?: HistoricalData[] } = {};
 			try {
 				const fileContent = await fs.promises.readFile(filePath, "utf-8");
 				existingData = JSON.parse(fileContent);
