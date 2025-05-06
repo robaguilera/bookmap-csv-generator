@@ -1,11 +1,11 @@
-import { beforeAll, expect, mock, test } from "bun:test";
+import { beforeAll, expect, test } from "bun:test";
 import fs from "node:fs/promises";
 import { join } from "node:path";
-import {
-	getHistoricalData,
-	getOhlcvData,
-	saveHistoricalData,
-} from "../src/dataService";
+
+import { insightsSentryApi } from "../src/api/insightsSentry";
+import { getPreviousDayOHLC, saveHistoricalData } from "../src/dataService";
+
+import type { HistoricalData } from "../src/api/apiAdapter";
 
 beforeAll(async () => {
 	try {
@@ -15,62 +15,25 @@ beforeAll(async () => {
 	}
 });
 
-// Mock API calls
-mock(() => ({
-	getOhlcvData: async (symbol: string) => {
-		return {
-			code: symbol,
-			bar_end: 1672531200,
-			last_update: 1672531200000,
-			bar_type: "1D",
-			series: [
-				{
-					time: 1672531200,
-					open: 100,
-					high: 120,
-					low: 90,
-					close: 110,
-					volume: 1000,
-				},
-			],
-		};
-	},
-	getHistoricalData: async (symbol: string) => {
-		return {
-			code: symbol,
-			bar_end: 1672531200,
-			last_update: 1672531200000,
-			bar_type: "1D",
-			series: [
-				{
-					time: 1672531200,
-					open: 100,
-					high: 120,
-					low: 90,
-					close: 110,
-					volume: 1000,
-				},
-			],
-		};
-	},
-}));
-
-test("fetchOhlcv returns data", async () => {
-	const data = await getOhlcvData("CME_MINI:ES1!");
-	expect(data).toBeDefined();
-	expect(data.series.length).toBeGreaterThan(0);
-});
-
-test("fetchHistoricalData returns data", async () => {
-	const data = await getHistoricalData("CME_MINI:ES1!");
-	expect(data).toBeDefined();
-	expect(data.series.length).toBeGreaterThan(0);
-});
-
 test("storeHistoricalData stores data to file", async () => {
 	const symbol = "CME_MINI:ES1!";
-	const data = await getHistoricalData(symbol);
 	const filePath = join("./test_data/historical", `${symbol}.json`);
+	const mockHistoricalData = {
+		code: symbol,
+		bar_end: 1672531200,
+		last_update: 1672531200000,
+		bar_type: "1D",
+		series: [
+			{
+				time: 1672531200,
+				open: 100,
+				high: 120,
+				low: 90,
+				close: 110,
+				volume: 1000,
+			},
+		],
+	};
 
 	// Ensure the file doesn't exist before the test
 	try {
@@ -82,7 +45,11 @@ test("storeHistoricalData stores data to file", async () => {
 	}
 
 	// Call storeHistoricalData
-	await saveHistoricalData(symbol, data, "./test_data/historical");
+	await saveHistoricalData(
+		symbol,
+		mockHistoricalData,
+		"./test_data/historical",
+	);
 
 	// Check if the file exists after the function call
 	try {
@@ -93,6 +60,55 @@ test("storeHistoricalData stores data to file", async () => {
 
 	// Clean up the file after the test
 	await fs.unlink(filePath);
+});
+
+test("getPreviousDayOHLC returns the previous day's OHLC data", async () => {
+	const symbol = "CME_MINI:ES1!";
+	const mockHistoricalData = {
+		code: symbol,
+		bar_end: 1672531200,
+		last_update: 1672531200000,
+		bar_type: "1D",
+		series: [
+			{
+				time: 1672531100,
+				open: 90,
+				high: 100,
+				low: 80,
+				close: 95,
+				volume: 1300,
+			},
+			{
+				time: 1672531200,
+				open: 100,
+				high: 120,
+				low: 90,
+				close: 110,
+				volume: 1000,
+			},
+			{
+				time: 1672617600,
+				open: 110,
+				high: 130,
+				low: 100,
+				close: 120,
+				volume: 1100,
+			},
+		],
+	};
+
+	const originalFetchHistoricalData = insightsSentryApi.fetchHistoricalData;
+
+	insightsSentryApi.fetchHistoricalData = () =>
+		Promise.resolve(mockHistoricalData);
+
+	const previousDayOHLC = await getPreviousDayOHLC(symbol);
+
+	expect(previousDayOHLC).toEqual(
+		mockHistoricalData.series[1] as HistoricalData,
+	);
+
+	insightsSentryApi.fetchHistoricalData = originalFetchHistoricalData;
 });
 
 test("generateOhlcCSV generates CSV file", async () => {

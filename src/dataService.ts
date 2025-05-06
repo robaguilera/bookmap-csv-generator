@@ -1,6 +1,10 @@
 import { insightsSentryApi } from "./api/insightsSentry";
 
-import type { HistoricalResponse, OhlcvResponse } from "./api/apiAdapter";
+import type {
+	HistoricalData,
+	HistoricalResponse,
+	OhlcvResponse,
+} from "./api/apiAdapter";
 
 const apiService = insightsSentryApi;
 
@@ -20,4 +24,23 @@ async function saveHistoricalData(
 	await apiService.storeHistoricalData(symbol, data, destinationDir);
 }
 
-export { getOhlcvData, getHistoricalData, saveHistoricalData };
+async function getPreviousDayOHLC(
+	symbol: string,
+): Promise<HistoricalData | undefined> {
+	const historicalData = await getHistoricalData(symbol);
+
+	const { series } = historicalData;
+
+	if (!series || series.length < 2) {
+		return undefined;
+	}
+
+	return series[series.length - 2];
+}
+
+export {
+	getOhlcvData,
+	getHistoricalData,
+	saveHistoricalData,
+	getPreviousDayOHLC,
+};

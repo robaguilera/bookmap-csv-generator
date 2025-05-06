@@ -42,4 +42,4 @@ interface ApiAdapter {
 	): Promise<void>;
 }
 
-export type { ApiAdapter, OhlcvResponse, HistoricalResponse };
+export type { ApiAdapter, OhlcvResponse, HistoricalResponse, HistoricalData };
