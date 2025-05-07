@@ -11,9 +11,11 @@
 - [x] 2025-05-04: Rethink and improve how we calculate OHLC values
 - [x] 2025-05-01: Calculate intraday overnight highs and lows and add to the CSV files
 - [x] 2025-05-01: Set up automation for current progress
-- [ ] 2025-05-06: Create 3 CSV files for each futures indicator with different symbols
-- [ ] 2025-05-06: Create CSV files for the mini, micro, & pro sheets
-- [ ] 2025-05-06: Before overwriting the CSV files copy and archive the current file
+- [x] 2025-05-06: Create 3 CSV files for each futures indicator with different symbols
+- [x] 2025-05-06: Group CSV files into indicator-specific directories
+- [x] 2025-05-06: Before overwriting the CSV files copy and archive the current file
+- [x] 2025-05-06: Refactor src/csv.ts to break up logic
+- [ ] 2025-05-06: Update script to take arguments for supply and demand levels
 - [ ] 2025-05-01: Implement Camarilla pivot point calculations
 - [ ] 2025-05-01: Implement Camarilla CSV file generation
 - [ ] 2025-05-01: Implement archiving
