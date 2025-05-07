@@ -38,7 +38,12 @@ interface ApiAdapter {
 		bar_type?: string,
 		bar_interval?: number,
 	): Promise<OhlcvResponse>;
-	fetchHistoricalData(symbol: string): Promise<HistoricalResponse>;
+	fetchHistoricalData(
+		symbol: string,
+		bar_type?: string,
+		bar_interval?: number,
+		extended?: boolean,
+	): Promise<HistoricalResponse>;
 	storeHistoricalData(
 		symbol: string,
 		data: HistoricalResponse,

@@ -16,8 +16,18 @@ async function getOhlcvData(
 	return await apiService.fetchOhlcv(symbol, bar_type, bar_interval);
 }
 
-async function getHistoricalData(symbol: string): Promise<HistoricalResponse> {
-	return await apiService.fetchHistoricalData(symbol);
+async function getHistoricalData(
+	symbol: string,
+	bar_type?: string,
+	bar_interval?: number,
+	extended?: boolean,
+): Promise<HistoricalResponse> {
+	return await apiService.fetchHistoricalData(
+		symbol,
+		bar_type,
+		bar_interval,
+		extended,
+	);
 }
 
 async function saveHistoricalData(

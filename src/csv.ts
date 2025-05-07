@@ -1,6 +1,9 @@
 import { promises as fs } from "node:fs";
 import { join } from "node:path";
-import { getCurrentDayPremarketHighLow } from "./dataService";
+import {
+	getCurrentDayPremarketHighLow,
+	getPreviousDayOHLC,
+} from "./dataService";
 
 const csvDir = "csv";
 const historicalDataDir = "data/historical";
@@ -25,24 +28,10 @@ interface CombinedData {
 }
 
 async function generateOhlcCSV(symbol: string) {
-	const filePath = join(historicalDataDir, `${symbol}.json`);
-
-	let data: { series: HistoricalData[] } | undefined;
-	try {
-		const fileContent = await fs.readFile(filePath, "utf-8");
-		data = JSON.parse(fileContent);
-	} catch (error: unknown) {
-		console.error(`Error reading historical data for ${symbol}:`, error);
-		return;
-	}
-
-	if (!data || !data.series || data.series.length === 0) {
-		console.error(`No historical data found for ${symbol}`);
-		return;
-	}
+	const historicalData = await getPreviousDayOHLC(symbol);
 
 	// Get the last day's data
-	const lastDay = data.series[data.series.length - 1];
+	const lastDay = await historicalData;
 
 	if (!lastDay) {
 		console.error(`No last day data found for ${symbol}`);

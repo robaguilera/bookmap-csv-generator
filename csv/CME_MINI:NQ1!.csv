@@ -1,7 +1,7 @@
 Symbol,Price Level,Note,Foreground Color,Background Color,Text Alignment,Draw Note Price Horizontal Line
-CME_MINI:NQ1!,20125.75,PDH,#ffffff,#FF00FF,right,TRUE
-CME_MINI:NQ1!,19870.75,PDC,#ffffff,#FF00FF,right,TRUE
-CME_MINI:NQ1!,19757.25,PDL,#ffffff,#FF00FF,right,TRUE
-CME_MINI:NQ1!,19834,PDO,#ffffff,#FF00FF,right,TRUE
+CME_MINI:NQ1!,20036.75,PDH,#ffffff,#FF00FF,right,TRUE
+CME_MINI:NQ1!,19876.5,PDC,#ffffff,#FF00FF,right,TRUE
+CME_MINI:NQ1!,19739,PDL,#ffffff,#FF00FF,right,TRUE
+CME_MINI:NQ1!,20014.25,PDO,#ffffff,#FF00FF,right,TRUE
 CME_MINI:NQ1!,20133.75,PMH,#000000,#ccccff,right,TRUE
 CME_MINI:NQ1!,19799.5,PML,#000000,#ccccff,right,TRUE
