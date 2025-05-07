@@ -39,8 +39,13 @@ const insightsSentryApi: ApiAdapter = {
 
 		return data;
 	},
-	fetchHistoricalData: async (symbol: string) => {
-		const url = `${baseUrl}/${symbol}/history?bar_interval=1&bar_type=day&extended=true&badj=true&dadj=false`;
+	fetchHistoricalData: async (
+		symbol: string,
+		bar_type = "day",
+		bar_interval = 1,
+		extended = false,
+	) => {
+		const url = `${baseUrl}/${symbol}/history?bar_interval=${bar_interval}&bar_type=${bar_type}&extended=${extended}&badj=true&dadj=false`;
 
 		const options = {
 			method: "GET",
