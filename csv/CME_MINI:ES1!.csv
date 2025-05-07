@@ -1,0 +1,7 @@
+Symbol,Price Level,Note,Foreground Color,Background Color,Text Alignment,Draw Note Price Horizontal Line
+CME_MINI:ES1!,5682.5,PDH,#ffffff,#FF00FF,right,TRUE
+CME_MINI:ES1!,5623.25,PDC,#ffffff,#FF00FF,right,TRUE
+CME_MINI:ES1!,5601.75,PDL,#ffffff,#FF00FF,right,TRUE
+CME_MINI:ES1!,5617.5,PDO,#ffffff,#FF00FF,right,TRUE
+CME_MINI:ES1!,5689.75,PMH,#000000,#ccccff,right,TRUE
+CME_MINI:ES1!,5608.5,PML,#000000,#ccccff,right,TRUE

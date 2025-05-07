@@ -46,7 +46,7 @@ async function getCurrentDayPremarketHighLow(
 	symbol: string,
 ): Promise<{ high: number; low: number } | undefined> {
 	// Fetch 1-minute data
-	const ohlcvData = await getOhlcvData(symbol, "minute", 1);
+	const ohlcvData = await getOhlcvData(symbol, "day", 1);
 
 	const { series } = ohlcvData;
 
@@ -54,48 +54,13 @@ async function getCurrentDayPremarketHighLow(
 		return undefined;
 	}
 
-	// Calculate 9:30 AM EST cutoff time in UTC (assuming DST -> 14:30 UTC)
-	// TODO: Make timezone handling more robust (consider DST changes)
-	const now = new Date();
-	const marketOpenCutoff = new Date(
-		Date.UTC(
-			now.getUTCFullYear(),
-			now.getUTCMonth(),
-			now.getUTCDate(),
-			14,
-			30,
-			0,
-			0,
-		),
-	);
-	const cutoffTimestampSeconds = Math.floor(marketOpenCutoff.getTime() / 1000);
+	const firstSeries = series[0];
 
-	// Filter for premarket bars (before 9:30 AM EST / 14:30 UTC)
-	const premarketSeries = series.filter(
-		(item) => item.time < cutoffTimestampSeconds,
-	);
-
-	if (premarketSeries.length === 0) {
-		// No data before market open
+	if (!firstSeries) {
 		return undefined;
 	}
 
-	let high = Number.NEGATIVE_INFINITY;
-	let low = Number.POSITIVE_INFINITY;
-
-	for (const item of premarketSeries) {
-		if (item.high > high) {
-			high = item.high;
-		}
-		if (item.low < low) {
-			low = item.low;
-		}
-	}
-
-	// If high/low are still Infinity, it means no valid data was found
-	if (high === Number.NEGATIVE_INFINITY || low === Number.POSITIVE_INFINITY) {
-		return undefined;
-	}
+	const { high, low } = firstSeries;
 
 	return { high, low };
 }
@@ -107,3 +72,38 @@ export {
 	getPreviousDayOHLC,
 	getCurrentDayPremarketHighLow,
 };
+
+function isMarketClosed(): boolean {
+	// Get current time in EST
+	const now = new Date();
+	const estOffset = -5; // EST is UTC-5
+	const estTime = new Date(now.getTime() + estOffset * 60 * 60 * 1000);
+
+	const dayOfWeek = estTime.getDay(); // 0 = Sunday, 6 = Saturday
+	const hour = estTime.getHours();
+
+	// Market is closed on weekends
+	if (dayOfWeek === 0 || dayOfWeek === 6) {
+		return true;
+	}
+
+	// Market hours (EST): 9:30 AM - 4:00 PM
+	const marketOpenHour = 9;
+	const marketOpenMinute = 30;
+	const marketCloseHour = 16;
+	const marketCloseMinute = 0;
+
+	const currentTimeInMinutes = hour * 60 + estTime.getMinutes();
+	const marketOpenTimeInMinutes = marketOpenHour * 60 + marketOpenMinute;
+	const marketCloseTimeInMinutes = marketCloseHour * 60 + marketCloseMinute;
+
+	// Check if the current time is outside market hours
+	if (
+		currentTimeInMinutes < marketOpenTimeInMinutes ||
+		currentTimeInMinutes >= marketCloseTimeInMinutes
+	) {
+		return true;
+	}
+
+	return false;
+}

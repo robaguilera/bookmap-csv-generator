@@ -1,5 +1,6 @@
 import { promises as fs } from "node:fs";
 import { join } from "node:path";
+import { getCurrentDayPremarketHighLow } from "./dataService";
 
 const csvDir = "csv";
 const historicalDataDir = "data/historical";
@@ -86,6 +87,31 @@ async function generateOhlcCSV(symbol: string) {
 			"Draw Note Price Horizontal Line": "TRUE",
 		},
 	];
+
+	// Get premarket high and low
+	const premarketData = await getCurrentDayPremarketHighLow(symbol);
+
+	if (premarketData) {
+		csvData.push({
+			Symbol: symbol,
+			"Price Level": premarketData?.high ?? 0,
+			Note: "PMH",
+			"Foreground Color": "#000000",
+			"Background Color": "#ccccff",
+			"Text Alignment": "right",
+			"Draw Note Price Horizontal Line": "TRUE",
+		});
+
+		csvData.push({
+			Symbol: symbol,
+			"Price Level": premarketData?.low ?? 0,
+			Note: "PML",
+			"Foreground Color": "#000000",
+			"Background Color": "#ccccff",
+			"Text Alignment": "right",
+			"Draw Note Price Horizontal Line": "TRUE",
+		});
+	}
 
 	if (csvData.length === 0) {
 		console.error(`No CSV data found for ${symbol}`);
