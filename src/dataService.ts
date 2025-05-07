@@ -1,6 +1,7 @@
 import { insightsSentryApi } from "./api/insightsSentry";
 
 import type {
+	ApiParams,
 	HistoricalData,
 	HistoricalResponse,
 	OhlcvResponse,
@@ -8,40 +9,38 @@ import type {
 
 const apiService = insightsSentryApi;
 
-async function getOhlcvData(
-	symbol: string,
-	bar_type?: string,
-	bar_interval?: number,
-): Promise<OhlcvResponse> {
-	return await apiService.fetchOhlcv(symbol, bar_type, bar_interval);
-}
-
-async function getHistoricalData(
-	symbol: string,
-	bar_type?: string,
-	bar_interval?: number,
-	extended?: boolean,
-): Promise<HistoricalResponse> {
-	return await apiService.fetchHistoricalData(
+async function getOhlcvData({
+	symbol,
+	barType,
+	barInterval,
+	extended,
+}: ApiParams): Promise<OhlcvResponse> {
+	return await apiService.fetchOhlcv({
 		symbol,
-		bar_type,
-		bar_interval,
+		barType,
+		barInterval,
 		extended,
-	);
+	});
 }
 
-async function saveHistoricalData(
-	symbol: string,
-	data: HistoricalResponse,
-	destinationDir: string,
-) {
-	await apiService.storeHistoricalData(symbol, data, destinationDir);
+async function getHistoricalData({
+	symbol,
+	barType,
+	barInterval,
+	extended,
+}: ApiParams): Promise<HistoricalResponse> {
+	return await apiService.fetchHistoricalData({
+		symbol,
+		barType,
+		barInterval,
+		extended,
+	});
 }
 
 async function getPreviousDayOHLC(
 	symbol: string,
 ): Promise<HistoricalData | undefined> {
-	const historicalData = await getHistoricalData(symbol);
+	const historicalData = await getHistoricalData({ symbol });
 
 	const { series } = historicalData;
 
@@ -56,7 +55,7 @@ async function getCurrentDayPremarketHighLow(
 	symbol: string,
 ): Promise<{ high: number; low: number } | undefined> {
 	// Fetch 1-minute data
-	const ohlcvData = await getOhlcvData(symbol, "day", 1);
+	const ohlcvData = await getOhlcvData({ symbol });
 
 	const { series } = ohlcvData;
 
@@ -78,7 +77,6 @@ async function getCurrentDayPremarketHighLow(
 export {
 	getOhlcvData,
 	getHistoricalData,
-	saveHistoricalData,
 	getPreviousDayOHLC,
 	getCurrentDayPremarketHighLow,
 };

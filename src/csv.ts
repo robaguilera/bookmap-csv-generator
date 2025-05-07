@@ -6,16 +6,6 @@ import {
 } from "./dataService";
 
 const csvDir = "csv";
-const historicalDataDir = "data/historical";
-
-interface HistoricalData {
-	time: number;
-	open: number;
-	high: number;
-	low: number;
-	close: number;
-	volume: number;
-}
 
 interface CombinedData {
 	Symbol: string;
@@ -84,7 +74,7 @@ async function generateOhlcCSV(symbol: string) {
 		csvData.push({
 			Symbol: symbol,
 			"Price Level": premarketData?.high ?? 0,
-			Note: "PMH",
+			Note: "ONH",
 			"Foreground Color": "#000000",
 			"Background Color": "#ccccff",
 			"Text Alignment": "right",
@@ -94,7 +84,7 @@ async function generateOhlcCSV(symbol: string) {
 		csvData.push({
 			Symbol: symbol,
 			"Price Level": premarketData?.low ?? 0,
-			Note: "PML",
+			Note: "ONL",
 			"Foreground Color": "#000000",
 			"Background Color": "#ccccff",
 			"Text Alignment": "right",
@@ -113,8 +103,6 @@ async function generateOhlcCSV(symbol: string) {
 
 	const filePathCsv = join(csvDir, `${symbol}.csv`);
 	await fs.writeFile(filePathCsv, csvContent);
-
-	console.log(`CSV file generated for ${symbol} at ${filePathCsv}`);
 }
 
 export { generateOhlcCSV };

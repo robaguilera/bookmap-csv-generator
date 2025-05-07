@@ -1,8 +1,6 @@
-import fs from "node:fs";
-import { join } from "node:path";
 import fetch from "node-fetch";
 import type {
-	HistoricalData,
+	ApiParams,
 	HistoricalResponse,
 	OhlcvResponse,
 } from "./apiAdapter";
@@ -15,11 +13,14 @@ if (!apiKey) {
 }
 
 const baseUrl = "https://insightsentry.p.rapidapi.com/v2/symbols";
-const historicalDataDir = "data/historical";
 
 const insightsSentryApi: ApiAdapter = {
-	fetchOhlcv: async (symbol: string, bar_type = "day", bar_interval = 1) => {
-		const url = `${baseUrl}/${symbol}/series?bar_type=${bar_type}&bar_interval=${bar_interval}&extended=true&badj=true&dadj=false`;
+	fetchOhlcv: async ({
+		symbol,
+		barType = "day",
+		barInterval = 1,
+	}: ApiParams) => {
+		const url = `${baseUrl}/${symbol}/series?bar_type=${barType}&bar_interval=${barInterval}&extended=true&badj=true&dadj=false`;
 
 		const options = {
 			method: "GET",
@@ -39,13 +40,13 @@ const insightsSentryApi: ApiAdapter = {
 
 		return data;
 	},
-	fetchHistoricalData: async (
-		symbol: string,
-		bar_type = "day",
-		bar_interval = 1,
+	fetchHistoricalData: async ({
+		symbol,
+		barType = "day",
+		barInterval = 1,
 		extended = false,
-	) => {
-		const url = `${baseUrl}/${symbol}/history?bar_interval=${bar_interval}&bar_type=${bar_type}&extended=${extended}&badj=true&dadj=false`;
+	}: ApiParams) => {
+		const url = `${baseUrl}/${symbol}/history?bar_interval=${barInterval}&bar_type=${barType}&extended=${extended}&badj=true&dadj=false`;
 
 		const options = {
 			method: "GET",
@@ -63,47 +64,6 @@ const insightsSentryApi: ApiAdapter = {
 
 		const data = (await response.json()) as HistoricalResponse;
 		return data;
-	},
-	storeHistoricalData: async (
-		symbol: string,
-		data: HistoricalResponse,
-		destinationDir: string = historicalDataDir,
-	) => {
-		const filePath = join(destinationDir, `${symbol}.json`);
-
-		try {
-			// Read existing data from file
-			let existingData: { series?: HistoricalData[] } = {};
-			try {
-				const fileContent = await fs.promises.readFile(filePath, "utf-8");
-				existingData = JSON.parse(fileContent);
-			} catch (readError: unknown) {
-				if ((readError as { code: string }).code !== "ENOENT") {
-					console.error(
-						`Error reading existing data for ${symbol}:`,
-						readError,
-					);
-					throw readError;
-				}
-			}
-
-			// Append new data to existing data
-			const updatedData = {
-				...existingData,
-				series: [...(existingData.series || []), ...data.series],
-			};
-
-			// Write updated data back to file
-			await fs.promises.writeFile(
-				filePath,
-				JSON.stringify(updatedData, null, 2),
-			);
-
-			console.log(`Historical data stored for ${symbol} in ${filePath}`);
-		} catch (error: unknown) {
-			console.error(`Error storing historical data for ${symbol}:`, error);
-			throw error;
-		}
 	},
 };
 

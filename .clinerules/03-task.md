@@ -10,8 +10,8 @@
 - [x] 2025-05-01: Hide api implementation detail
 - [x] 2025-05-04: Rethink and improve how we calculate OHLC values
 - [x] 2025-05-01: Calculate intraday overnight highs and lows and add to the CSV files
+- [ ] 2025-05-01: Set up automation for current progress
 - [ ] 2025-05-01: Implement Camarilla pivot point calculations
-- [ ] 2025-05-01: Implement CSV file generation
+- [ ] 2025-05-01: Implement Camarilla CSV file generation
 - [ ] 2025-05-01: Implement archiving
 - [ ] 2025-05-01: Write tests
-- [ ] 2025-05-01: Set up automation

@@ -11,7 +11,7 @@ interface OhlcvResponse {
 	code: string;
 	bar_end: number;
 	last_update: number;
-	bar_type: string;
+	barType: string;
 	series: OhlcvData[];
 }
 
@@ -28,30 +28,34 @@ interface HistoricalResponse {
 	code: string;
 	bar_end: number;
 	last_update: number;
-	bar_type: string;
+	barType: string;
 	series: HistoricalData[];
 }
 
+interface ApiParams {
+	symbol: string;
+	barType?: string;
+	barInterval?: number;
+	extended?: boolean;
+}
+
 interface ApiAdapter {
-	fetchOhlcv(
-		symbol: string,
-		bar_type?: string,
-		bar_interval?: number,
-	): Promise<OhlcvResponse>;
-	fetchHistoricalData(
-		symbol: string,
-		bar_type?: string,
-		bar_interval?: number,
-		extended?: boolean,
-	): Promise<HistoricalResponse>;
-	storeHistoricalData(
-		symbol: string,
-		data: HistoricalResponse,
-		destinationDir: string,
-	): Promise<void>;
+	fetchOhlcv({
+		symbol,
+		barType,
+		barInterval,
+		extended,
+	}: ApiParams): Promise<OhlcvResponse>;
+	fetchHistoricalData({
+		symbol,
+		barType,
+		barInterval,
+		extended,
+	}: ApiParams): Promise<HistoricalResponse>;
 }
 
 export type {
+	ApiParams,
 	ApiAdapter,
 	OhlcvResponse,
 	HistoricalResponse,

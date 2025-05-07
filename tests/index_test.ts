@@ -22,7 +22,7 @@ test("storeHistoricalData stores data to file", async () => {
 		code: symbol,
 		bar_end: 1672531200,
 		last_update: 1672531200000,
-		bar_type: "1D",
+		barType: "1D",
 		series: [
 			{
 				time: 1672531200,
@@ -68,7 +68,7 @@ test("getPreviousDayOHLC returns the previous day's OHLC data", async () => {
 		code: symbol,
 		bar_end: 1672531200,
 		last_update: 1672531200000,
-		bar_type: "1D",
+		barType: "1D",
 		series: [
 			{
 				time: 1672531100,
@@ -132,7 +132,7 @@ test("getCurrentDayPremarketHighLow returns correct high/low from premarket data
 		code: symbol,
 		bar_end: postmarketTime,
 		last_update: Date.now(),
-		bar_type: "minute",
+		barType: "minute",
 		series: [
 			{
 				time: premarketTime1,
@@ -205,7 +205,7 @@ test("getCurrentDayPremarketHighLow returns undefined if only postmarket data ex
 		code: symbol,
 		bar_end: postmarketTime,
 		last_update: Date.now(),
-		bar_type: "minute",
+		barType: "minute",
 		series: [
 			{
 				time: postmarketTime,
@@ -235,7 +235,7 @@ test("getCurrentDayPremarketHighLow returns undefined for empty series", async (
 		code: symbol,
 		bar_end: 1672531200, // Example timestamp
 		last_update: Date.now(),
-		bar_type: "minute",
+		barType: "minute",
 		series: [],
 	};
 
