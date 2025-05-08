@@ -1,0 +1,7 @@
+Symbol,Price Level,Note,Foreground Color,Background Color,Text Alignment,Draw Note Price Horizontal Line
+ESM5.CME@RITHMIC,5673.25,PDH,#ffffff,#FF00FF,right,TRUE
+ESM5.CME@RITHMIC,5625.75,PDC,#ffffff,#FF00FF,right,TRUE
+ESM5.CME@RITHMIC,5605,PDL,#ffffff,#FF00FF,right,TRUE
+ESM5.CME@RITHMIC,5666.25,PDO,#ffffff,#FF00FF,right,TRUE
+ESM5.CME@RITHMIC,5689.75,ONH,#000000,#ccccff,right,TRUE
+ESM5.CME@RITHMIC,5608.5,ONL,#000000,#ccccff,right,TRUE

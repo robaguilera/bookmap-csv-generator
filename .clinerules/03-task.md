@@ -15,6 +15,7 @@
 - [x] 2025-05-06: Group CSV files into indicator-specific directories
 - [x] 2025-05-06: Before overwriting the CSV files copy and archive the current file
 - [x] 2025-05-06: Refactor src/csv.ts to break up logic
+- [x] 2025-05-07: Group archived csv files in folders by date
 - [ ] 2025-05-06: Update script to take arguments for supply and demand levels
 - [ ] 2025-05-01: Implement Camarilla pivot point calculations
 - [ ] 2025-05-01: Implement Camarilla CSV file generation

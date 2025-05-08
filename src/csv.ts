@@ -144,19 +144,31 @@ function formatCsvContent(csvData: CombinedData[]): string {
  * @param indicatorDir The indicator subdirectory (e.g., "es" or "nq").
  * @param csvSymbol The symbol of the CSV file.
  */
+/**
+ * Archives an existing CSV file into a date-stamped subdirectory.
+ *
+ * @param filePathCsv The path to the current CSV file.
+ * @param indicatorDir The indicator subdirectory (e.g., "es" or "nq").
+ * @param csvSymbol The symbol of the CSV file.
+ */
 async function archiveCsvFile(
 	filePathCsv: string,
 	indicatorDir: string,
 	csvSymbol: string,
 ): Promise<void> {
-	const archiveDir = join(archiveDirBase, indicatorDir);
-	await fs.mkdir(archiveDir, { recursive: true });
+	const currentDateFormatted = format(new Date(), "M-d-yy"); // e.g., 5-7-25
+	const archiveDateDir = join(
+		archiveDirBase,
+		indicatorDir,
+		currentDateFormatted,
+	);
+	await fs.mkdir(archiveDateDir, { recursive: true });
 
-	const currentDate = format(new Date(), "MMM-d"); // e.g., May-6
-	const archivedFileName = `${currentDate}-${csvSymbol}.csv`;
-	const archivedFilePath = join(archiveDir, archivedFileName);
+	const archivedFileName = `${csvSymbol}.csv`; // Keep original filename in date folder
+	const archivedFilePath = join(archiveDateDir, archivedFileName);
 
 	try {
+		// Reason: Use copyFile to duplicate the file before it's overwritten.
 		await fs.copyFile(filePathCsv, archivedFilePath);
 		console.log(`Archived ${filePathCsv} to ${archivedFilePath}`);
 	} catch (error: unknown) {
