@@ -162,6 +162,28 @@ async function archiveCsvFile(
 		indicatorDir,
 		currentDateFormatted,
 	);
+
+	try {
+		// Check if the archive directory for today already exists
+		await fs.access(archiveDateDir, fs.constants.F_OK);
+		console.log(
+			`Archive directory for ${currentDateFormatted} already exists for ${indicatorDir}. Skipping archiving for ${csvSymbol}.`,
+		);
+		return; // Skip archiving if directory exists
+	} catch (error: unknown) {
+		// If the error is ENOENT, the directory doesn't exist, so proceed.
+		// Otherwise, re-throw the error.
+		if (error instanceof Error && "code" in error && error.code === "ENOENT") {
+			// Directory does not exist, proceed to create it
+		} else {
+			console.error(
+				`Error checking archive directory ${archiveDateDir}: ${error}`,
+			);
+			throw error;
+		}
+	}
+
+	// If the directory didn't exist, create it and archive the file
 	await fs.mkdir(archiveDateDir, { recursive: true });
 
 	const archivedFileName = `${csvSymbol}.csv`; // Keep original filename in date folder
