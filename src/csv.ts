@@ -1,13 +1,11 @@
 import { promises as fs } from "node:fs";
 import { join } from "node:path";
-import { format } from "date-fns";
 import {
 	getCurrentDayPremarketHighLow,
 	getPreviousDayOHLC,
 } from "./dataService";
 
 const csvDir = "csv";
-const archiveDirBase = join(csvDir, "archive");
 
 interface CombinedData {
 	Symbol: string;
@@ -138,71 +136,6 @@ function formatCsvContent(csvData: CombinedData[]): string {
 }
 
 /**
- * Archives an existing CSV file.
- *
- * @param filePathCsv The path to the current CSV file.
- * @param indicatorDir The indicator subdirectory (e.g., "es" or "nq").
- * @param csvSymbol The symbol of the CSV file.
- */
-/**
- * Archives an existing CSV file into a date-stamped subdirectory.
- *
- * @param filePathCsv The path to the current CSV file.
- * @param indicatorDir The indicator subdirectory (e.g., "es" or "nq").
- * @param csvSymbol The symbol of the CSV file.
- */
-async function archiveCsvFile(
-	filePathCsv: string,
-	indicatorDir: string,
-	csvSymbol: string,
-): Promise<void> {
-	const currentDateFormatted = format(new Date(), "M-d-yy"); // e.g., 5-7-25
-	const archiveDateDir = join(
-		archiveDirBase,
-		indicatorDir,
-		currentDateFormatted,
-	);
-
-	try {
-		// Check if the archive directory for today already exists
-		await fs.access(archiveDateDir, fs.constants.F_OK);
-		console.log(
-			`Archive directory for ${currentDateFormatted} already exists for ${indicatorDir}. Skipping archiving for ${csvSymbol}.`,
-		);
-		return; // Skip archiving if directory exists
-	} catch (error: unknown) {
-		// If the error is ENOENT, the directory doesn't exist, so proceed.
-		// Otherwise, re-throw the error.
-		if (error instanceof Error && "code" in error && error.code === "ENOENT") {
-			// Directory does not exist, proceed to create it
-		} else {
-			console.error(
-				`Error checking archive directory ${archiveDateDir}: ${error}`,
-			);
-			throw error;
-		}
-	}
-
-	// If the directory didn't exist, create it and archive the file
-	await fs.mkdir(archiveDateDir, { recursive: true });
-
-	const archivedFileName = `${csvSymbol}.csv`; // Keep original filename in date folder
-	const archivedFilePath = join(archiveDateDir, archivedFileName);
-
-	try {
-		// Reason: Use copyFile to duplicate the file before it's overwritten.
-		await fs.copyFile(filePathCsv, archivedFilePath);
-		console.log(`Archived ${filePathCsv} to ${archivedFilePath}`);
-	} catch (error: unknown) {
-		if (error instanceof Error && "code" in error && error.code === "ENOENT") {
-			console.log(`No existing file to archive at ${filePathCsv}`);
-		} else {
-			console.error(`Error archiving file ${filePathCsv}: ${error}`);
-		}
-	}
-}
-
-/**
  * Generates OHLC CSV files for a given API symbol and a list of CSV symbols.
  * Fetches data using the API symbol and creates a separate CSV file for each CSV symbol.
  *
@@ -210,6 +143,8 @@ async function archiveCsvFile(
  * @param csvSymbols An array of symbols to be used in the CSV file names and content.
  */
 async function generateOhlcCSV(apiSymbol: string, csvSymbols: string[]) {
+	console.log(`Generating CSV for ${apiSymbol}`);
+
 	const historicalData = await getPreviousDayOHLC(apiSymbol);
 
 	// Get the last day's data
@@ -239,11 +174,9 @@ async function generateOhlcCSV(apiSymbol: string, csvSymbols: string[]) {
 		const indicatorDir = apiSymbol.includes("ES") ? "es" : "nq";
 		const filePathCsv = join(csvDir, indicatorDir, `${csvSymbol}.csv`);
 
-		// Archive the current file before overwriting
-		await archiveCsvFile(filePathCsv, indicatorDir, csvSymbol);
-
 		await fs.writeFile(filePathCsv, csvContent);
 	}
+	console.log(`Done! ${apiSymbol} csv generated. Go make that money!`);
 }
 
 export { generateOhlcCSV };

@@ -1,7 +1,0 @@
-Symbol,Price Level,Note,Foreground Color,Background Color,Text Alignment,Draw Note Price Horizontal Line
-MNQM5.CME@RITHMIC,20036.75,PDH,#ffffff,#FF00FF,right,TRUE
-MNQM5.CME@RITHMIC,19876.5,PDC,#ffffff,#FF00FF,right,TRUE
-MNQM5.CME@RITHMIC,19739,PDL,#ffffff,#FF00FF,right,TRUE
-MNQM5.CME@RITHMIC,20014.25,PDO,#ffffff,#FF00FF,right,TRUE
-MNQM5.CME@RITHMIC,20133.75,ONH,#000000,#ccccff,right,TRUE
-MNQM5.CME@RITHMIC,19799.5,ONL,#000000,#ccccff,right,TRUE
