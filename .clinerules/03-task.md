@@ -16,6 +16,7 @@
 - [x] 2025-05-06: Before overwriting the CSV files copy and archive the current file
 - [x] 2025-05-06: Refactor src/csv.ts to break up logic
 - [x] 2025-05-07: Group archived csv files in folders by date
+- [x] 2025-05-08: Remove archiving (Bookmap replay still doesn't work)
 - [ ] 2025-05-01: Implement Camarilla pivot point calculations
 - [ ] 2025-05-01: Implement Camarilla CSV file generation
 - [ ] 2025-05-01: Write tests
