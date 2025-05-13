@@ -39,8 +39,9 @@ async function getHistoricalData({
 
 async function getPreviousDayOHLC(
 	symbol: string,
+	extended = false,
 ): Promise<HistoricalData | undefined> {
-	const historicalData = await getHistoricalData({ symbol, extended: false });
+	const historicalData = await getHistoricalData({ symbol, extended });
 
 	const { series } = historicalData;
 
