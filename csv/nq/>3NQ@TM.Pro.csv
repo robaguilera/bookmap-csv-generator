@@ -1,7 +1,7 @@
 Symbol,Price Level,Note,Foreground Color,Background Color,Text Alignment,Draw Note Price Horizontal Line
->3NQ@TM.Pro,21419.5,PDH,#ffffff,#FF00FF,right,TRUE
->3NQ@TM.Pro,21392.5,PDC,#ffffff,#FF00FF,right,TRUE
->3NQ@TM.Pro,21238.25,PDL,#ffffff,#FF00FF,right,TRUE
->3NQ@TM.Pro,21250,PDO,#ffffff,#FF00FF,right,TRUE
->3NQ@TM.Pro,21412,ONH,#000000,#ccccff,right,TRUE
->3NQ@TM.Pro,21192,ONL,#000000,#ccccff,right,TRUE
+>3NQ@TM.Pro,21529.75,PDH,#ffffff,#FF00FF,right,TRUE
+>3NQ@TM.Pro,21400.25,PDC,#ffffff,#FF00FF,right,TRUE
+>3NQ@TM.Pro,21192,PDL,#ffffff,#FF00FF,right,TRUE
+>3NQ@TM.Pro,21379.75,PDO,#ffffff,#FF00FF,right,TRUE
+>3NQ@TM.Pro,21501,ONH,#000000,#ccccff,right,TRUE
+>3NQ@TM.Pro,21348.75,ONL,#000000,#ccccff,right,TRUE
