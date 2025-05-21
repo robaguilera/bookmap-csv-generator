@@ -15,10 +15,10 @@ async function main() {
 	await generateOhlcCSV(nqApiSymbol, nqCsvSymbols);
 
 	// Generate Pivot CSVs for ES symbols
-	await generatePivotsCSV(esApiSymbol, esCsvSymbols);
+	// await generatePivotsCSV(esApiSymbol, esCsvSymbols);
 
 	// Generate Pivot CSVs for NQ symbols
-	await generatePivotsCSV(nqApiSymbol, nqCsvSymbols);
+	// await generatePivotsCSV(nqApiSymbol, nqCsvSymbols);
 }
 
 main().catch(console.error);
