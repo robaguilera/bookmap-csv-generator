@@ -1,5 +1,4 @@
 import { generateOhlcCSV } from "./src/csv";
-import { generatePivotsCSV } from "./src/pivots";
 
 async function main() {
 	const esApiSymbol = "CME_MINI:ES1!";
@@ -13,12 +12,6 @@ async function main() {
 
 	// Generate OHLC CSVs for NQ symbols
 	await generateOhlcCSV(nqApiSymbol, nqCsvSymbols);
-
-	// Generate Pivot CSVs for ES symbols
-	// await generatePivotsCSV(esApiSymbol, esCsvSymbols);
-
-	// Generate Pivot CSVs for NQ symbols
-	// await generatePivotsCSV(nqApiSymbol, nqCsvSymbols);
 }
 
 main().catch(console.error);
