@@ -1,0 +1,7 @@
+Symbol,Price Level,Note,Foreground Color,Background Color,Text Alignment,Draw Note Price Horizontal Line
+MESU5.CME@RITHMIC,6109,PDH,#ffffff,#FF00FF,right,TRUE
+MESU5.CME@RITHMIC,6089.75,PDC,#ffffff,#FF00FF,right,TRUE
+MESU5.CME@RITHMIC,6000,PDL,#ffffff,#FF00FF,right,TRUE
+MESU5.CME@RITHMIC,6001,PDO,#ffffff,#FF00FF,right,TRUE
+MESU5.CME@RITHMIC,6093.5,ONH,#000000,#ccccff,right,TRUE
+MESU5.CME@RITHMIC,6051.25,ONL,#000000,#ccccff,right,TRUE
